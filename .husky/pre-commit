@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx concurrently \
+  --kill-others-on-fail \
+  --prefix "[{name}]" \
+  --names "format,lint" \
+  --prefix-colors "bgMagenta.bold,bgGreen.bold" \
+    "npm run format" \
+    "npm run lint"
