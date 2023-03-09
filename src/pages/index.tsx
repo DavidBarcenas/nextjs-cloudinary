@@ -13,23 +13,25 @@ export default function Home() {
         <meta name='viewport' content='width=device-width, initial-scale=1' />
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <main>
-        <section className='flex flex-col'>
+      <main className='w-full h-screen'>
+        <section className='flex flex-col w-full h-full'>
           <header className='flex items-center justify-between px-4 leading-[60px] border-b border-gray-700'>
             <Logo />
             <nav className='flex'>
               <a href=''>Editor de fotos</a>
             </nav>
           </header>
-          <div className='flex grow'>
-            <div className='flex items-center justify-center grow px-4'>
-              <img
-                className='max-w-full'
-                src='https://images.pexels.com/photos/5622626/pexels-photo-5622626.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
-                alt='preview'
-              />
+          <div className='flex grow overflow-hidden'>
+            <div className='flex items-center justify-center grow h-full'>
+              <div className='w-full h-full p-8'>
+                <img
+                  className='object-cover h-full m-auto'
+                  src='https://images.pexels.com/photos/1925482/pexels-photo-1925482.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+                  alt='preview'
+                />
+              </div>
             </div>
-            <aside className='w-full max-w-md border-l border-gray-700'>
+            <aside className='w-full max-w-xs border-l border-gray-700'>
               <ul>
                 <li>
                   <span>I</span>
