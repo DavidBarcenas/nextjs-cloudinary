@@ -23,6 +23,17 @@ export default function Home() {
     maxFiles: 1,
   });
 
+  const uploadFile = async () => {
+    const formData = new FormData();
+    formData.append('file', files[0]);
+    const uploadImage = await fetch('/api/upload-file', {
+      method: 'POST',
+      body: formData,
+    });
+    const res = await uploadImage.json();
+    console.log(res);
+  };
+
   return (
     <>
       <Head>
@@ -66,7 +77,7 @@ export default function Home() {
             </div>
             <aside className='w-full max-w-xs border-l border-gray-700'>
               <ul>
-                <li>
+                <li onClick={uploadFile}>
                   <span>I</span>
                   <span>Eliminar fondo</span>
                 </li>
