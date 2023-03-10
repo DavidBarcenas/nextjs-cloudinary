@@ -60,6 +60,7 @@ export default function Home() {
                   <img
                     className='object-cover h-full m-auto'
                     src={files[0]?.preview}
+                    alt='previes'
                     // Revoke data uri after image is loaded
                     onLoad={() => {
                       URL.revokeObjectURL(files[0].preview);

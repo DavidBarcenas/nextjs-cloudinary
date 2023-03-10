@@ -11,5 +11,7 @@
     "sourceType": "module"
   },
   "plugins": ["react", "@typescript-eslint", "prettier"],
-  "rules": {}
+  "rules": {
+    "@next/next/no-img-element": "off"
+  }
 }
