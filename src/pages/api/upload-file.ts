@@ -1,43 +1,74 @@
 import nc from 'next-connect';
 import multer from 'multer';
 import DatauriParser from 'datauri/parser';
+import { v2 as cloudinary } from 'cloudinary';
+import type { RequestFile } from '@/interfaces/file';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import path from 'node:path';
+
+interface ExtendedRequest {
+  file: RequestFile;
+}
+
+interface ErrorAPI {
+  name: string;
+  message: string;
+  http_code: number;
+}
+
+function isACreditsError(obj: unknown): obj is ErrorAPI {
+  if (obj && typeof obj === 'object') {
+    return 'name' in obj && 'message' in obj && 'http_code' in obj;
+  }
+  return false;
+}
 
 const handler = nc<NextApiRequest, NextApiResponse>({
-  onError: (res: NextApiResponse) => {
-    res.status(500).end('Ocurrió un error');
+  onError: (error, req, res: NextApiResponse) => {
+    let errorMessage = 'Lo sentimos ha ocurrido un error';
+    if (error instanceof multer.MulterError) {
+      errorMessage = 'La propiedad "File" es requerida';
+    }
+    res.status(500).end(errorMessage);
   },
+
   onNoMatch: (req: NextApiRequest, res: NextApiResponse) => {
-    res.status(404).end('No econtrado');
+    res.status(404).end('No encontrado');
   },
 })
   .use(multer().single('file'))
-  .post<any>(async (req, res) => {
+  .post<ExtendedRequest, NextApiResponse>(async (req, res) => {
     const image = req.file;
     const parser = new DatauriParser();
 
     try {
-      const createImage = async (img: any) => {
-        const base64Iamge = parser.format(path.extname(img.originalname).toString(), img.buffer);
+      const base64Image = parser.format(image.originalname, image.buffer);
 
-        const formData = new FormData();
-        formData.append('file', base64Iamge.content || '');
-        formData.append('upload_preset', process.env.CLOUDINARY_PRESET || '');
-        formData.append('timestamp', (Date.now() / 1000).toString());
-        formData.append('api_key', process.env.CLOUDINARY_API_KEY || '');
+      if (!base64Image.content) {
+        throw new Error();
+      }
 
-        const upload = await fetch(process.env.CLOUDINARY_API_URL || '', {
-          method: 'POST',
-          body: formData,
-        });
-        return upload;
-      };
-      const imageModified = await createImage(image);
-      const json = await imageModified.json();
-      res.json({ error: null, data: json });
+      const response = await cloudinary.uploader.upload(base64Image.content, {
+        public_id: base64Image.fileName,
+        background_removal: 'cloudinary_ai',
+        resource_type: 'image',
+      });
+
+      if (!response.secure_url) {
+        throw new Error();
+      }
+
+      return res.json({ error: null, data: response });
     } catch (error) {
-      res.status(500).json({ error, data: null });
+      console.error('[API ERROR] ', error);
+      let message;
+
+      if (error instanceof Error) message = error.message;
+
+      if (isACreditsError(error)) {
+        console.log('entra a qui', error);
+        message = 'Lo sentimos, en este momento no es posible eliminar el fondo';
+      }
+      return res.status(500).json({ error: message, data: null });
     }
   });
 
