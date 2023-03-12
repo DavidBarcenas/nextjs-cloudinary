@@ -1,7 +1,8 @@
 import nc from 'next-connect';
 import multer from 'multer';
 import DatauriParser from 'datauri/parser';
-import { v2 as cloudinary } from 'cloudinary';
+import cloudinary from '@/config/cloudinary';
+import { errorMessages } from '@/config/constants';
 import type { RequestFile } from '@/interfaces/file';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
@@ -9,30 +10,17 @@ interface ExtendedRequest {
   file: RequestFile;
 }
 
-interface ErrorAPI {
-  name: string;
-  message: string;
-  http_code: number;
-}
-
-function isACreditsError(obj: unknown): obj is ErrorAPI {
-  if (obj && typeof obj === 'object') {
-    return 'name' in obj && 'message' in obj && 'http_code' in obj;
-  }
-  return false;
-}
-
 const handler = nc<NextApiRequest, NextApiResponse>({
   onError: (error, req, res: NextApiResponse) => {
-    let errorMessage = 'Lo sentimos ha ocurrido un error';
+    let errorMessage = errorMessages.serverError;
     if (error instanceof multer.MulterError) {
-      errorMessage = 'La propiedad "File" es requerida';
+      errorMessage = errorMessages.fileInBody;
     }
     res.status(500).end(errorMessage);
   },
 
   onNoMatch: (req: NextApiRequest, res: NextApiResponse) => {
-    res.status(404).end('No encontrado');
+    res.status(404).end(errorMessages.methodNotAllowed);
   },
 })
   .use(multer().single('file'))
@@ -44,7 +32,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
       const base64Image = parser.format(image.originalname, image.buffer);
 
       if (!base64Image.content) {
-        throw new Error();
+        throw new Error(errorMessages.unparsedImage);
       }
 
       const response = await cloudinary.uploader.upload(base64Image.content, {
@@ -53,22 +41,13 @@ const handler = nc<NextApiRequest, NextApiResponse>({
         resource_type: 'image',
       });
 
-      if (!response.secure_url) {
-        throw new Error();
+      if (!response.ok) {
+        throw new Error(errorMessages.requestFailure);
       }
 
       return res.json({ error: null, data: response });
     } catch (error) {
-      console.error('[API ERROR] ', error);
-      let message;
-
-      if (error instanceof Error) message = error.message;
-
-      if (isACreditsError(error)) {
-        console.log('entra a qui', error);
-        message = 'Lo sentimos, en este momento no es posible eliminar el fondo';
-      }
-      return res.status(500).json({ error: message, data: null });
+      return res.status(500).json({ error: errorMessages.serverError, data: null });
     }
   });
 
