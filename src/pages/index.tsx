@@ -1,4 +1,4 @@
-import { Logo } from '@/components/logo';
+import { Header } from '@/components/header';
 import Head from 'next/head';
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -47,12 +47,7 @@ export default function Home() {
       </Head>
       <main className='w-full h-screen'>
         <section className='flex flex-col w-full h-full'>
-          <header className='flex items-center justify-between px-4 leading-[60px] border-b border-gray-700'>
-            <Logo />
-            <nav className='flex'>
-              <a href=''>Editor de fotos</a>
-            </nav>
-          </header>
+          <Header />
           <div className='flex grow overflow-hidden'>
             <div className='flex items-center justify-center grow h-full'>
               <div className='w-full h-full p-8 '>
