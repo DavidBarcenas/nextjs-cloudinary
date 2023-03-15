@@ -1,31 +1,11 @@
+import { Dropzone } from '@/components/dropzone';
 import { Header } from '@/components/header';
 import Head from 'next/head';
-import { useCallback, useState } from 'react';
-import { useDropzone } from 'react-dropzone';
 
 export default function Home() {
-  const [files, setFiles] = useState<any[]>([]);
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setFiles(
-      acceptedFiles.map((file: any) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        }),
-      ),
-    );
-  }, []);
-  const { getRootProps, getInputProps, isDragActive, isFileDialogActive } = useDropzone({
-    onDrop,
-    accept: {
-      'image/jpeg': [],
-      'image/png': [],
-    },
-    maxFiles: 1,
-  });
-
   const uploadFile = async () => {
     const formData = new FormData();
-    formData.append('file', files[0]);
+    // formData.append('file', files[0]);
     const uploadImage = await fetch('/api/upload-file', {
       method: 'POST',
       body: formData,
@@ -49,28 +29,7 @@ export default function Home() {
         <section className='flex flex-col w-full h-full'>
           <Header />
           <div className='flex grow overflow-hidden'>
-            <div className='flex items-center justify-center grow h-full'>
-              <div className='w-full h-full p-8 '>
-                {files[0] ? (
-                  <img
-                    className='object-cover h-full m-auto'
-                    src={files[0]?.preview}
-                    alt='previes'
-                    // Revoke data uri after image is loaded
-                    onLoad={() => {
-                      URL.revokeObjectURL(files[0].preview);
-                    }}
-                  />
-                ) : (
-                  <div
-                    {...getRootProps()}
-                    className={`w-full h-full ${isFileDialogActive ? 'bg-red-400' : ''}`}
-                  >
-                    <input {...getInputProps()} />
-                  </div>
-                )}
-              </div>
-            </div>
+            <Dropzone />
             <aside className='w-full max-w-xs border-l border-gray-700'>
               <ul>
                 <li onClick={uploadFile}>
