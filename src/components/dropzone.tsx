@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { ChevronDown, UploadIcon } from './icons';
+import { ChevronUp, UploadIcon } from './icons';
 
 export function Dropzone() {
   const [files, setFiles] = useState<any[]>([]);
@@ -37,24 +37,26 @@ export function Dropzone() {
             }}
           />
         ) : (
-          <div
-            {...getRootProps()}
-            className={`w-full h-full flex flex-col items-center justify-center ${
-              isFileDialogActive ? 'border-dashed border-2 border-gray-700' : ''
-            }`}
-          >
-            <input {...getInputProps()} />
-            <UploadIcon size='156' />
-            <h2 className='text-3xl font-semibold mt-5 mb-2'>Arrastra y suelta tu foto aquí</h2>
-            <p className='text-gray-500 mb-9'>Imagenes JPG, PNG o GIF - max 8MB</p>
-            <div className='flex items-center mb-14'>
-              <span className='text-gray-500'>o</span>
-              <button className='border border-gray-700 rounded-tl-md rounded-bl-md py-2 px-6 ml-4 tracking-wider text-sm text-gray-300'>
-                Presiona para subir una foto
-              </button>
-              <span className='border border-gray-700 rounded-r-md rounded-br-md px-3 flex items-center h-full border-l-0 text-gray-300 cursor-pointer'>
-                <ChevronDown />
-              </span>
+          <div className='w-full h-full flex items-center justify-center'>
+            <div
+              {...getRootProps()}
+              className={`flex flex-col items-center max-w-xl mb-14 p-12 ${
+                isFileDialogActive || isDragActive ? 'border-dashed border-2 border-gray-700' : ''
+              }`}
+            >
+              <input {...getInputProps()} />
+              <UploadIcon size='156' />
+              <h2 className='text-3xl font-semibold mt-5 mb-2'>Arrastra y suelta tu imagen aquí</h2>
+              <p className='text-gray-500 mb-9'>Imagenes JPG, PNG y GIF - max 8MB</p>
+              <div className='flex items-center'>
+                <span className='text-gray-500'>o</span>
+                <button className='border border-gray-700 rounded-md pl-6 ml-4 tracking-wider text-sm text-gray-300 transition hover:bg-white/5'>
+                  Selecciona una imagen
+                  <span className='inline-block align-middle border-l border-gray-700 ml-6 py-3 px-3'>
+                    <ChevronUp />
+                  </span>
+                </button>
+              </div>
             </div>
           </div>
         )}
