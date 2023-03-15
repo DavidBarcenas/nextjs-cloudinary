@@ -4,7 +4,8 @@ module.exports = {
   theme: {
     extend: {
       animation: {
-        shine: 'brightness 0.5s 0s linear',
+        shine: 'brightness .5s 0s linear',
+        fade: 'fadeIn .5s ease-in-out forwards',
       },
       boxShadow: {
         '3xl': '0 0 30px 5px rgba(0, 142, 236, 0.816)',
@@ -22,6 +23,14 @@ module.exports = {
           '100%': {
             opacity: '0',
             left: '100%',
+          },
+        },
+        fadeIn: {
+          0: {
+            opacity: '0',
+          },
+          '100%': {
+            opacity: '1',
           },
         },
       },

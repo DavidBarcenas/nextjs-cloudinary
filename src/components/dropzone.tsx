@@ -25,7 +25,7 @@ export function Dropzone() {
 
   return (
     <div className='flex items-center justify-center grow h-full'>
-      <div className='w-full h-full p-8 '>
+      <div className={`w-full h-full p-8 ${files[0] ? 'opacity-0 animate-fade' : ''}`}>
         {files[0] ? (
           <img
             className='object-cover h-full m-auto'
