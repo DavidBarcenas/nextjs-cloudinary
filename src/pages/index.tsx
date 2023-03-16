@@ -1,5 +1,6 @@
 import { Dropzone } from '@/components/dropzone';
 import { Header } from '@/components/header';
+import { Sidebar } from '@/components/sidebar';
 import Head from 'next/head';
 
 export default function Home() {
@@ -30,14 +31,7 @@ export default function Home() {
           <Header />
           <div className='flex grow overflow-hidden'>
             <Dropzone />
-            <aside className='w-full max-w-xs border-l border-gray-700'>
-              <ul>
-                <li onClick={uploadFile}>
-                  <span>I</span>
-                  <span>Eliminar fondo</span>
-                </li>
-              </ul>
-            </aside>
+            <Sidebar />
           </div>
         </section>
       </main>
