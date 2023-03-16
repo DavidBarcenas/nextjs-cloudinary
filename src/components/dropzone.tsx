@@ -41,7 +41,7 @@ export function Dropzone() {
             <div
               {...getRootProps()}
               className={`flex flex-col items-center max-w-xl mb-14 p-12 ${
-                isFileDialogActive || isDragActive ? 'border-dashed border-2 border-gray-700' : ''
+                isFileDialogActive || isDragActive ? 'border-dashed border-2 border-primary' : ''
               }`}
             >
               <input {...getInputProps()} />

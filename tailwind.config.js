@@ -11,6 +11,9 @@ module.exports = {
         '3xl': '0 0 30px 5px rgba(0, 142, 236, 0.816)',
         '4xl': '0 0 50px 30px #fff',
       },
+      colors: {
+        primary: '#3d6aff',
+      },
       keyframes: {
         brightness: {
           0: {
