@@ -4,7 +4,7 @@ import DatauriParser from 'datauri/parser';
 import cloudinary from '@/config/cloudinary';
 import { errorMessages } from '@/config/constants';
 import type { RequestFile } from '@/interfaces/file';
-import type { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 interface ExtendedRequest {
   file: RequestFile;
@@ -37,7 +37,6 @@ const handler = nc<NextApiRequest, NextApiResponse>({
 
       const response = await cloudinary.uploader.upload(base64Image.content, {
         public_id: base64Image.fileName,
-        background_removal: 'cloudinary_ai',
         resource_type: 'image',
       });
 
