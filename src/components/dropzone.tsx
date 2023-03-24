@@ -4,7 +4,7 @@ import { ChevronUp, UploadIcon } from './icons';
 import type { UploadFile } from '@/interfaces/file';
 
 export function Dropzone() {
-  const [file, setFile] = useState<UploadFile | null>(null);
+  const [file, setFile] = useState<{ publicId: string; secureUrl: string } | null>(null);
 
   const uploadFile = async (file: File) => {
     const formData = new FormData();
@@ -14,17 +14,18 @@ export function Dropzone() {
       body: formData,
     });
     const response = await uploadImage.json();
+    setFile(response.data);
     console.log(response);
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
-    setFile(
-      acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-        }),
-      )[0],
-    );
+    // setFile(
+    //   acceptedFiles.map((file) =>
+    //     Object.assign(file, {
+    //       preview: URL.createObjectURL(file),
+    //     }),
+    //   )[0],
+    // );
     uploadFile(acceptedFiles[0]);
   }, []);
 
@@ -43,10 +44,10 @@ export function Dropzone() {
         {file ? (
           <img
             className='object-cover h-full m-auto'
-            src={file.preview}
-            alt='previes'
+            src={file.secureUrl}
+            alt='preview'
             onLoad={() => {
-              URL.revokeObjectURL(file.preview);
+              URL.revokeObjectURL(file.secureUrl);
             }}
           />
         ) : (
