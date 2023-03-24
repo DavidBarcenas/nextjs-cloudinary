@@ -6,6 +6,17 @@ import type { UploadFile } from '@/interfaces/file';
 export function Dropzone() {
   const [file, setFile] = useState<UploadFile | null>(null);
 
+  const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const uploadImage = await fetch('/api/upload-file', {
+      method: 'POST',
+      body: formData,
+    });
+    const response = await uploadImage.json();
+    console.log(response);
+  };
+
   const onDrop = useCallback((acceptedFiles: File[]) => {
     setFile(
       acceptedFiles.map((file) =>
@@ -14,6 +25,7 @@ export function Dropzone() {
         }),
       )[0],
     );
+    uploadFile(acceptedFiles[0]);
   }, []);
 
   const { getRootProps, getInputProps, isDragActive, isFileDialogActive } = useDropzone({
