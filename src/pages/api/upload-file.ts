@@ -40,12 +40,19 @@ const handler = nc<NextApiRequest, NextApiResponse>({
         resource_type: 'image',
       });
 
-      if (!response.ok) {
+      if (!response.public_id) {
         throw new Error(errorMessages.requestFailure);
       }
 
-      return res.json({ error: null, data: response });
+      return res.json({
+        error: null,
+        data: {
+          publicId: response.public_id,
+          secureUrl: response.secure_url,
+        },
+      });
     } catch (error) {
+      console.error(error);
       return res.status(500).json({ error: errorMessages.serverError, data: null });
     }
   });
