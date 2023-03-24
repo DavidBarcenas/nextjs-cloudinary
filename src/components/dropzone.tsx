@@ -1,19 +1,21 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ChevronUp, UploadIcon } from './icons';
+import type { UploadFile } from '@/interfaces/file';
 
 export function Dropzone() {
-  const [files, setFiles] = useState<any[]>([]);
+  const [file, setFile] = useState<UploadFile | null>(null);
 
-  const onDrop = useCallback((acceptedFiles: any) => {
-    setFiles(
-      acceptedFiles.map((file: any) =>
+  const onDrop = useCallback((acceptedFiles: File[]) => {
+    setFile(
+      acceptedFiles.map((file) =>
         Object.assign(file, {
           preview: URL.createObjectURL(file),
         }),
-      ),
+      )[0],
     );
   }, []);
+
   const { getRootProps, getInputProps, isDragActive, isFileDialogActive } = useDropzone({
     onDrop,
     accept: {
@@ -25,15 +27,14 @@ export function Dropzone() {
 
   return (
     <div className='flex items-center justify-center grow h-full'>
-      <div className={`w-full h-full p-8 ${files[0] ? 'opacity-0 animate-fade' : ''}`}>
-        {files[0] ? (
+      <div className={`w-full h-full p-8 ${file ? 'opacity-0 animate-fade' : ''}`}>
+        {file ? (
           <img
             className='object-cover h-full m-auto'
-            src={files[0]?.preview}
+            src={file.preview}
             alt='previes'
-            // Revoke data uri after image is loaded
             onLoad={() => {
-              URL.revokeObjectURL(files[0].preview);
+              URL.revokeObjectURL(file.preview);
             }}
           />
         ) : (
