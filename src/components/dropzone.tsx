@@ -1,11 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ChevronUp, UploadIcon } from './icons';
-import type { UploadFile } from '@/interfaces/file';
 
 export function Dropzone() {
   const [file, setFile] = useState<{ publicId: string; secureUrl: string } | null>(null);
-
   const uploadFile = async (file: File) => {
     const formData = new FormData();
     formData.append('file', file);
