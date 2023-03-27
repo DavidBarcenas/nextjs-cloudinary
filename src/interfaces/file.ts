@@ -1,5 +1,6 @@
-export interface UploadFile extends File {
-  preview: string;
+export interface ImageResponseClient {
+  previewUrl: string;
+  token: string;
 }
 
 export interface RequestFile {
