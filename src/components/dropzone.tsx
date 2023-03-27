@@ -1,10 +1,13 @@
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ChevronUp, UploadIcon } from './icons';
+import { Loader } from '@/components/loader';
 
 export function Dropzone() {
   const [file, setFile] = useState<{ publicId: string; secureUrl: string } | null>(null);
+  const [status, setStatus] = useState('idle');
   const uploadFile = async (file: File) => {
+    setStatus('loading');
     const formData = new FormData();
     formData.append('file', file);
     const uploadImage = await fetch('/api/upload-file', {
@@ -13,6 +16,7 @@ export function Dropzone() {
     });
     const response = await uploadImage.json();
     setFile(response.data);
+    setStatus('success');
     console.log(response);
   };
 
@@ -39,16 +43,11 @@ export function Dropzone() {
   return (
     <div className='flex items-center justify-center grow h-full'>
       <div className={`w-full h-full p-8 ${file ? 'opacity-0 animate-fade' : ''}`}>
-        {file ? (
-          <img
-            className='object-cover h-full m-auto'
-            src={file.secureUrl}
-            alt='preview'
-            onLoad={() => {
-              URL.revokeObjectURL(file.secureUrl);
-            }}
-          />
-        ) : (
+        {status === 'loading' && <Loader />}
+        {status === 'success' && (
+          <img className='object-cover h-full m-auto' src={file?.secureUrl} alt='preview' />
+        )}
+        {status === 'idle' && (
           <div className='w-full h-full flex items-center justify-center'>
             <div
               {...getRootProps()}
