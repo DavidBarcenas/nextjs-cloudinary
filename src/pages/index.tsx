@@ -1,20 +1,9 @@
-import { Dropzone } from '@/components/dropzone';
+import Head from 'next/head';
 import { Header } from '@/components/header';
 import { Sidebar } from '@/components/sidebar';
-import Head from 'next/head';
+import { ImageArea } from '@/components/image-area';
 
 export default function Home() {
-  const uploadFile = async () => {
-    const formData = new FormData();
-    // formData.append('file', files[0]);
-    const uploadImage = await fetch('/api/upload-file', {
-      method: 'POST',
-      body: formData,
-    });
-    const res = await uploadImage.json();
-    console.log(res);
-  };
-
   return (
     <>
       <Head>
@@ -30,7 +19,7 @@ export default function Home() {
         <section className='flex flex-col w-full h-full'>
           <Header />
           <div className='flex grow overflow-hidden'>
-            <Dropzone />
+            <ImageArea />
             <Sidebar />
           </div>
         </section>
