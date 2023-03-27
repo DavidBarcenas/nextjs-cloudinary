@@ -1,17 +1,17 @@
 export function Loader() {
   return (
-    <>
+    <div className='flex flex-col items-center justify-center h-full w-full'>
       <div className='loader'></div>
-
+      <p className='animate-pulse text-2xl text-gray-500 text-center'>
+        Espere un momento por favor, <span className='block'>estamos preparando su imagen...</span>
+      </p>
       <style jsx>{`
         .loader {
           display: block;
           position: relative;
-          left: 50%;
-          top: 50%;
           width: 150px;
           height: 150px;
-          margin: -75px 0 0 -75px;
+          margin: 0 auto 30px;
           border-radius: 50%;
           border: 3px solid transparent;
           border-top-color: #16a085;
@@ -63,6 +63,6 @@ export function Loader() {
           }
         }
       `}</style>
-    </>
+    </div>
   );
 }
