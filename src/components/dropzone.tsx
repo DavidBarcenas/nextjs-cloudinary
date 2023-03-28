@@ -2,10 +2,13 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ChevronUp, UploadIcon } from './icons';
 import { useFileStore } from '@/stores/files';
+import { useRequestStatusStore } from '@/stores/request-status';
 
 export function Dropzone() {
   const setFile = useFileStore((state) => state.setFile);
+  const setStatus = useRequestStatusStore((state) => state.setStatus);
   const uploadFile = async (file: File) => {
+    setStatus('loading');
     const formData = new FormData();
     formData.append('file', file);
     const uploadImage = await fetch('/api/upload-file', {
@@ -14,6 +17,7 @@ export function Dropzone() {
     });
     const response = await uploadImage.json();
     setFile(response.data);
+    setStatus('success');
   };
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
