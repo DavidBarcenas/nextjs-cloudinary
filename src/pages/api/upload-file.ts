@@ -47,8 +47,8 @@ const handler = nc<NextApiRequest, NextApiResponse>({
       return res.json({
         error: null,
         data: {
-          publicId: response.public_id,
-          secureUrl: response.secure_url,
+          token: response.public_id,
+          previewUrl: response.secure_url,
         },
       });
     } catch (error) {
