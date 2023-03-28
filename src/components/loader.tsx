@@ -5,6 +5,7 @@ export function Loader() {
       <p className='animate-pulse text-2xl text-gray-500 text-center'>
         Espere un momento por favor, <span className='block'>estamos preparando su imagen...</span>
       </p>
+
       <style jsx>{`
         .loader {
           display: block;
