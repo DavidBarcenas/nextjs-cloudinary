@@ -6,7 +6,7 @@ import { ImagePreview } from '@/components/image-preview';
 export function ImageArea() {
   const status = useRequestStatusStore((state) => state.status);
 
-  if (status === 'idle') return <Dropzone />;
   if (status === 'loading') return <Loader />;
   if (status === 'success') return <ImagePreview />;
+  return <Dropzone />;
 }

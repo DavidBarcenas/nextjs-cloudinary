@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { ChevronUp, UploadIcon } from './icons';
 import { useFileStore } from '@/stores/files';
