@@ -2,9 +2,10 @@ import nc from 'next-connect';
 import multer from 'multer';
 import DatauriParser from 'datauri/parser';
 import cloudinary from '@/config/cloudinary';
+import crypto from 'node:crypto';
 import { errorMessages } from '@/config/constants';
 import type { RequestFile } from '@/interfaces/file';
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse } from 'next/types';
 
 interface ExtendedRequest {
   file: RequestFile;
@@ -36,7 +37,7 @@ const handler = nc<NextApiRequest, NextApiResponse>({
       }
 
       const response = await cloudinary.uploader.upload(base64Image.content, {
-        public_id: base64Image.fileName,
+        public_id: crypto.randomUUID(),
         resource_type: 'image',
       });
 
