@@ -1,5 +1,17 @@
 import { Button } from './button';
 import { GithubIcon } from './icons';
+import { fill } from '@cloudinary/url-gen/actions/resize';
+import { useFileStore } from '@/stores/files';
+import { Cloudinary } from '@cloudinary/url-gen';
+
+const cldUrlGen = new Cloudinary({
+  cloud: {
+    cloudName: process.env.NEXT_PUBLIC_CLOUDINARY_NAME,
+  },
+  url: {
+    secure: true,
+  },
+});
 
 const effectsList = [
   {
@@ -53,6 +65,12 @@ const effectsList = [
 ];
 
 export function Sidebar() {
+  const file = useFileStore((state) => state.file);
+  const fn = () => {
+    const myImage = cldUrlGen.image(file?.token).resize(fill().width(500).height(300));
+    console.log(myImage.toURL());
+  };
+
   return (
     <aside className='w-full h-full max-w-xs border-l border-gray-700 p-6 flex flex-col'>
       <div className='grow mb-8 overflow-y-auto'>
@@ -60,6 +78,7 @@ export function Sidebar() {
           {effectsList.map((item, i) => (
             <li
               key={item.name + i}
+              onClick={fn}
               className='text-center border border-gray-700 p-3 cursor-pointer transition hover:border-white hover:text-white'
             >
               <span className='flex justify-center mb-3'>{item.icon()}</span>
