@@ -66,9 +66,15 @@ const effectsList = [
 
 export function Sidebar() {
   const file = useFileStore((state) => state.file);
-  const fn = () => {
-    const myImage = cldUrlGen.image(file?.token).resize(fill().width(500).height(300));
-    console.log(myImage.toURL());
+  const setFile = useFileStore((state) => state.setFile);
+  const transformImage = () => {
+    if (file?.token) {
+      const myImage = cldUrlGen.image(file.token).resize(fill().width(500).height(300));
+      setFile({
+        token: file.token,
+        previewUrl: myImage.toURL(),
+      });
+    }
   };
 
   return (
@@ -78,7 +84,7 @@ export function Sidebar() {
           {effectsList.map((item, i) => (
             <li
               key={item.name + i}
-              onClick={fn}
+              onClick={transformImage}
               className='text-center border border-gray-700 p-3 cursor-pointer transition hover:border-white hover:text-white'
             >
               <span className='flex justify-center mb-3'>{item.icon()}</span>
