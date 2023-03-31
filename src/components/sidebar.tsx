@@ -67,6 +67,7 @@ const effectsList = [
 export function Sidebar() {
   const file = useFileStore((state) => state.file);
   const setFile = useFileStore((state) => state.setFile);
+
   const transformImage = () => {
     if (file?.token) {
       const myImage = cldUrlGen.image(file.token).resize(fill().width(500).height(300));
