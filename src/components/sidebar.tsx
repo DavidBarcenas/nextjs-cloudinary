@@ -18,50 +18,6 @@ const effectsList = [
     icon: GithubIcon,
     name: 'Eliminar Fondo',
   },
-  {
-    icon: GithubIcon,
-    name: 'Agregar Fondo',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Blanco y negro',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Eliminar Fondo',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Agregar Fondo',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Blanco y negro',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Eliminar Fondo',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Agregar Fondo',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Blanco y negro',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Eliminar Fondo',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Agregar Fondo',
-  },
-  {
-    icon: GithubIcon,
-    name: 'Blanco y negro',
-  },
 ];
 
 export function Sidebar() {
@@ -82,14 +38,16 @@ export function Sidebar() {
     <aside className='w-full h-full max-w-xs border-l border-gray-700 p-6 flex flex-col'>
       <div className='grow mb-8 overflow-y-auto'>
         <ul className='grid grid-cols-3 gap-3 text-gray-300'>
-          {effectsList.map((item, i) => (
+          {effectsList.map(({ icon: Icon, name }, i) => (
             <li
-              key={item.name + i}
+              key={name + i}
               onClick={transformImage}
               className='text-center border border-gray-700 p-3 cursor-pointer transition hover:border-white hover:text-white'
             >
-              <span className='flex justify-center mb-3'>{item.icon()}</span>
-              <small className='block leading-tight'>{item.name}</small>
+              <span className='flex justify-center mb-3'>
+                <Icon />
+              </span>
+              <small className='block leading-tight'>{name}</small>
             </li>
           ))}
         </ul>
