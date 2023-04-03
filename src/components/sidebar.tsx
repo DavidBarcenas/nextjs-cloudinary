@@ -1,8 +1,8 @@
 import { Button } from './button';
-import { GithubIcon } from './icons';
-import { fill } from '@cloudinary/url-gen/actions/resize';
+import { GithubIcon, RemoveBG } from './icons';
 import { useFileStore } from '@/stores/files';
 import { Cloudinary } from '@cloudinary/url-gen';
+import { backgroundRemoval } from '@cloudinary/url-gen/actions/effect';
 
 const cldUrlGen = new Cloudinary({
   cloud: {
@@ -15,8 +15,11 @@ const cldUrlGen = new Cloudinary({
 
 const effectsList = [
   {
-    icon: GithubIcon,
+    icon: RemoveBG,
     name: 'Eliminar Fondo',
+    transform: (tokenFile: string) => {
+      return cldUrlGen.image(tokenFile).effect(backgroundRemoval()).toURL();
+    },
   },
 ];
 
@@ -24,12 +27,12 @@ export function Sidebar() {
   const file = useFileStore((state) => state.file);
   const setFile = useFileStore((state) => state.setFile);
 
-  const transformImage = () => {
+  const transformImage = (callback: (tokenFile: string) => string) => {
     if (file?.token) {
-      const myImage = cldUrlGen.image(file.token).resize(fill().width(500).height(300));
+      const myImage = callback(file.token);
       setFile({
         token: file.token,
-        previewUrl: myImage.toURL(),
+        previewUrl: myImage,
       });
     }
   };
@@ -38,10 +41,10 @@ export function Sidebar() {
     <aside className='w-full h-full max-w-xs border-l border-gray-700 p-6 flex flex-col'>
       <div className='grow mb-8 overflow-y-auto'>
         <ul className='grid grid-cols-3 gap-3 text-gray-300'>
-          {effectsList.map(({ icon: Icon, name }, i) => (
+          {effectsList.map(({ icon: Icon, name, transform }, i) => (
             <li
               key={name + i}
-              onClick={transformImage}
+              onClick={() => transformImage(transform)}
               className='text-center border border-gray-700 p-3 cursor-pointer transition hover:border-white hover:text-white'
             >
               <span className='flex justify-center mb-3'>
