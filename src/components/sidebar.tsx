@@ -3,6 +3,7 @@ import { GithubIcon, RemoveBG } from './icons';
 import { useFileStore } from '@/stores/files';
 import { Cloudinary } from '@cloudinary/url-gen';
 import { backgroundRemoval } from '@cloudinary/url-gen/actions/effect';
+import { useRequestStatusStore } from '@/stores/request-status';
 
 const cldUrlGen = new Cloudinary({
   cloud: {
@@ -26,15 +27,35 @@ const effectsList = [
 export function Sidebar() {
   const file = useFileStore((state) => state.file);
   const setFile = useFileStore((state) => state.setFile);
+  const setStatus = useRequestStatusStore((state) => state.setStatus);
 
   const transformImage = (callback: (tokenFile: string) => string) => {
+    setStatus('loading');
     if (file?.token) {
       const myImage = callback(file.token);
-      setFile({
-        token: file.token,
-        previewUrl: myImage,
-      });
+      loadImage(myImage);
     }
+  };
+
+  const loadImage = (url: string, retries = 5, delay = 1000) => {
+    const img = new Image();
+    img.src = url;
+    img.onload = () => {
+      console.log('entra');
+      setFile({
+        token: file?.token || '',
+        previewUrl: url,
+      });
+      setStatus('success');
+    };
+    img.onerror = () => {
+      console.log('Entra al error');
+      if (retries > 0) {
+        setTimeout(() => loadImage(url, retries - 1), delay);
+      } else {
+        console.log('Termina los intentos');
+      }
+    };
   };
 
   return (
