@@ -60,6 +60,7 @@ export function Sidebar() {
 
   return (
     <aside className='w-full h-full max-w-xs border-l border-gray-700 p-6 flex flex-col'>
+      <div>Comparar</div>
       <div className='grow mb-8 overflow-y-auto'>
         <ul className='grid grid-cols-3 gap-3 text-gray-300'>
           {effectsList.map(({ icon: Icon, name, transform }, i) => (
